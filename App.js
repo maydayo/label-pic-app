@@ -11,8 +11,28 @@ export default class App extends Component {
       uri: "http://192.168.2.95:3005/graphql/",
     });
 
+    const errorLink = onError(({ graphQLErrors, networkError }) => {
+      if (graphQLErrors) {
+        graphQLErrors.map(({ message, locations, path }) =>
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+          )
+        );
+      }
+      if (networkError) {
+        if (networkError.message === "Network request failed") {
+          console.log("ไม่สามารถเชื่อมต่อกับระบบ กรุณาลองใหม่ภายหลัง");
+        }
+        console.log(
+          `Network error: ${networkError.message} Code:${
+            networkError.statusCode
+          }`
+        );
+      }
+    });
+
     this.client = new ApolloClient({
-      link: httpLink,
+      link: ApolloLink.from([errorLink, httpLink]),
       cache: new InMemoryCache()
     });
   }
