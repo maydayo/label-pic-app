@@ -1,55 +1,35 @@
 import React, { Component } from "react";
-import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
-import { RNCamera } from "react-native-camera";
-export default class TakePicScreen extends Component {
-
-  async takePicture() {
-    const { uri } = await this.camera
-      .takePictureAsync({ width: 720 })
-      .catch(err => console.error(err));
-    const type = "image/jpeg";
-    console.log(uri)
-    this.props.navigation.navigate("ReviewPic", {
-      uri,
-      type,
-    }
-)
+import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
+export default class ReviewPicScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      processing: false
+    };
   }
 
+  uploading() {
+    const { uri, type } = this.props.navigation.state.params;
+    console.log(uri);
+    this.props.navigation.goBack();
+  }
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.topView}>
-          <RNCamera
-            ref={ref => {
-              this.camera = ref;
-            }}
-            type={RNCamera.Constants.Type.back}
-            style={styles.cameraContainer}
-            flashMode={RNCamera.Constants.FlashMode.off}
-            androidCameraPermissionOptions={{
-              title: "Permission to use camera",
-              message: "We need your permission to use your camera",
-              buttonPositive: "Ok",
-              buttonNegative: "Cancel"
-            }}
-          />
           <View style={styles.imageViewContainer}>
             <Image
               style={styles.imageView}
-              source={require("../res/drawable/circle.png")}
+              source={{ uri: this.props.navigation.state.params.uri }}
             />
           </View>
         </View>
         <View style={styles.bottomView}>
           <TouchableOpacity
             style={styles.buttonViewContainer}
-            onPress={() => this.takePicture()}
+            onPress={() => this.uploading()}
           >
-            <Image
-              style={styles.buttonView}
-              source={require("../res/drawable/record-button.png")}
-            />
+            <Text>ส่งวิดีโอ</Text>
           </TouchableOpacity>
         </View>
       </View>

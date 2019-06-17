@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import HomeScreen from "./src/screens/HomeScreen"
-import TakePicScreen from "./src/screens/TakePicScreen"
-
+import Routes from "./Routes"
 export default class App extends Component {
   render() {
     return (
-      <TakePicScreen />
+      <Routes />
     );
   }
 }
