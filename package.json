@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "build": "cd android && ./gradlew assembleRelease",
+    "upload": "adb install -r ./android/app/build/outputs/apk/release/app-release.apk"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.2",
