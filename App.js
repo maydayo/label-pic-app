@@ -10,7 +10,7 @@ export default class App extends Component {
   constructor(...args) {
     super(args);
     const httpLink = new createUploadLink({
-      uri: "http://192.168.2.95:3005/graphql/",
+      uri: "http://192.168.2.43:3005/graphql/",
     });
 
     const errorLink = onError(({ graphQLErrors, networkError }) => {
