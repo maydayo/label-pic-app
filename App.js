@@ -3,6 +3,8 @@ import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { createUploadLink } from "apollo-upload-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { ApolloLink } from "apollo-link"
+import { onError } from "apollo-link-error"
 import Routes from "./Routes";
 export default class App extends Component {
   constructor(...args) {

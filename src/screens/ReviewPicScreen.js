@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
-export default class ReviewPicScreen extends Component {
+import { ReactNativeFile } from "apollo-upload-client";
+import { graphql, compose } from "react-apollo";
+import gql from "graphql-tag"
+
+class ReviewPicScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,9 +15,22 @@ export default class ReviewPicScreen extends Component {
   uploading() {
     const { uri, type } = this.props.navigation.state.params;
     console.log(uri);
+    const file = new ReactNativeFile({
+      uri,
+      name: `mobile-pic-label-upload.jpg`,
+      type
+    });
+    this.props.mutate(
+      {
+        variables: {
+          file
+        }
+      }
+    )
     this.props.navigation.goBack();
   }
   render() {
+    console.log("P",this.props)
     return (
       <View style={styles.container}>
         <View style={styles.topView}>
@@ -36,6 +53,17 @@ export default class ReviewPicScreen extends Component {
     );
   }
 }
+
+const uploadMutation = gql`
+  mutation uploadFile($file: Upload!) {
+    uploadFile(file: $file) {
+      id
+    }
+  }
+`;
+
+export default graphql(uploadMutation)(ReviewPicScreen)
+
 
 const styles = StyleSheet.create({
   container: {

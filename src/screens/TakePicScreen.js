@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, TouchableOpacity, View, Image } from "react-native";
 import { RNCamera } from "react-native-camera";
-export default class TakePicScreen extends Component {
 
+export default class TakePicScreen extends Component {
   async takePicture() {
     const { uri } = await this.camera
       .takePictureAsync({ width: 720 })
