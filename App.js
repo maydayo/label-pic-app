@@ -5,13 +5,13 @@ import { createUploadLink } from "apollo-upload-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloLink } from "apollo-link"
 import { onError } from "apollo-link-error"
-import { API_URL_DEV } from "react-native-dotenv";
+import { API_URL_DEV, API_URL_PROD } from "react-native-dotenv";
 import Routes from "./Routes";
 export default class App extends Component {
   constructor(...args) {
     super(args);
     const httpLink = new createUploadLink({
-      uri: API_URL_DEV,
+      uri: API_URL_PROD,
     });
 
     const errorLink = onError(({ graphQLErrors, networkError }) => {

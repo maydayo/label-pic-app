@@ -37,7 +37,7 @@ export default class TakePicScreen extends Component {
           <View style={styles.imageViewContainer}>
             <Image
               style={styles.imageView}
-              source={require("../res/drawable/circle.png")}
+              source={require("../res/drawable/hand.png")}
             />
           </View>
         </View>
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   imageViewContainer: {
+    margin: 10,
     position: "absolute",
     top: 0,
     left: 0,
