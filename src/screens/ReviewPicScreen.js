@@ -46,7 +46,7 @@ class ReviewPicScreen extends Component {
             style={styles.buttonViewContainer}
             onPress={() => this.uploading()}
           >
-            <Text>ส่งวิดีโอ</Text>
+            <Text style={styles.textButton}>ส่งวิดีโอ</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
     flexDirection: "column"
   },
   topView: {
-    flex: 5
+    flex: 5,
+    backgroundColor: "#000000",
   },
   bottomView: {
     flex: 1,
@@ -101,12 +102,12 @@ const styles = StyleSheet.create({
   },
   buttonViewContainer: {
     alignItems: "center",
+    justifyContent: "center",
     margin: 10,
     width: 80,
     height: 80
   },
-  buttonView: {
-    flex: 1,
-    resizeMode: "contain"
+  textButton: {
+    fontSize: 20
   }
 });
