@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, TouchableOpacity, View, Text, Image } from "react-native";
 import { ReactNativeFile } from "apollo-upload-client";
 import { graphql, compose } from "react-apollo";
-import gql from "graphql-tag"
+import gql from "graphql-tag";
+import Label from "../components/DrawRect";
 
 class ReviewPicScreen extends Component {
   constructor(props) {
@@ -20,17 +21,15 @@ class ReviewPicScreen extends Component {
       name: `mobile-pic-label-upload.jpg`,
       type
     });
-    this.props.mutate(
-      {
-        variables: {
-          file
-        }
+    this.props.mutate({
+      variables: {
+        file
       }
-    )
+    });
     this.props.navigation.goBack();
   }
   render() {
-    console.log("P",this.props)
+    console.log("P", this.props);
     return (
       <View style={styles.container}>
         <View style={styles.topView}>
@@ -39,6 +38,9 @@ class ReviewPicScreen extends Component {
               style={styles.imageView}
               source={{ uri: this.props.navigation.state.params.uri }}
             />
+          </View>
+          <View style={styles.imageViewContainer}>
+            <Label />
           </View>
         </View>
         <View style={styles.bottomView}>
@@ -62,8 +64,7 @@ const uploadMutation = gql`
   }
 `;
 
-export default graphql(uploadMutation)(ReviewPicScreen)
-
+export default graphql(uploadMutation)(ReviewPicScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   },
   topView: {
     flex: 5,
-    backgroundColor: "#000000",
+    backgroundColor: "#000000"
   },
   bottomView: {
     flex: 1,

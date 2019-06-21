@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, PanResponder, StyleSheet, Platform } from "react-native";
 import Svg, { G, Path, Rect } from "react-native-svg";
 import Pen from "./tools/pen";
-import Point from "./tools/point";
+import Label from "./Label"
 
 const { OS } = Platform;
 
@@ -42,18 +42,19 @@ export default class Whiteboard extends Component {
 
   _renderRectElement = (rect, index) => {
     return (
-      <Rect
-        {...this.state.pen.pointsToSvgRect(
-          rect.startPointX,
-          rect.startPointY,
-          rect.stopPointX,
-          rect.stopPointY
-        )}
-        key={index}
-        stroke={this.props.color || "#000000"}
-        strokeWidth={this.props.strokeWidth || 2}
-        fill="none"
-      />
+        <Label rect={rect} key={index} pen={this.state.pen} />
+    //   <Rect
+    //     {...this.state.pen.pointsToSvgRect(
+    //       rect.startPointX,
+    //       rect.startPointY,
+    //       rect.stopPointX,
+    //       rect.stopPointY
+    //     )}
+    //     key={index}
+    //     stroke={this.props.color || "#ff00ff"}
+    //     strokeWidth={this.props.strokeWidth || 2}
+    //     fill="none"
+    //   />
     );
   };
 
@@ -89,7 +90,6 @@ export default class Whiteboard extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <View style={styles.drawContainer} {...this._panResponder.panHandlers}>
         <Svg style={styles.drawSurface}>
@@ -104,7 +104,7 @@ export default class Whiteboard extends Component {
                 this.state.currentPointX,
                 this.state.currentPointY
               )}
-              stroke={this.props.color || "#000000"}
+              stroke={this.props.color || "#ff00ff"}
               strokeWidth={this.props.strokeWidth || 2}
               fill="none"
             />
