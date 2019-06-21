@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, PanResponder, StyleSheet, Platform } from "react-native";
 import Svg, { G, Path, Rect } from "react-native-svg";
 import Pen from "./tools/pen";
-import Point from './tools/point'
+import Point from "./tools/point";
 
 const { OS } = Platform;
 
@@ -10,10 +10,11 @@ export default class Whiteboard extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-        startPointX: null,
-        startPointY: null,
-        currentPointX: null,
-        currentPointY: null,
+      startPointX: null,
+      startPointY: null,
+      currentPointX: null,
+      currentPointY: null,
+      previousRects: [],
       pen: new Pen()
     };
     this._panResponder = PanResponder.create({
@@ -25,6 +26,37 @@ export default class Whiteboard extends Component {
     });
   }
 
+  rewind = () => {
+    if (this.state.previousRects.length < 1) return;
+    let rects = this.state.previousRects;
+    rects.pop();
+
+    this.setState({
+      previousRects: [...rects],
+      startPointX: null,
+      startPointY: null,
+      currentPointX: null,
+      currentPointY: null
+    });
+  };
+
+  _renderRectElement = (rect, index) => {
+    return (
+      <Rect
+        {...this.state.pen.pointsToSvgRect(
+          rect.startPointX,
+          rect.startPointY,
+          rect.stopPointX,
+          rect.stopPointY
+        )}
+        key={index}
+        stroke={this.props.color || "#000000"}
+        strokeWidth={this.props.strokeWidth || 2}
+        fill="none"
+      />
+    );
+  };
+
   onTouch(event) {
     let x, y, timpstamp;
     [x, y, timestamp] = [
@@ -32,57 +64,39 @@ export default class Whiteboard extends Component {
       event.nativeEvent.locationY,
       event.nativeEvent.timestamp
     ];
-    return {x, y};
+    return { x, y };
   }
 
   onResponderGrant(event) {
-    let {x, y} = this.onTouch(event);
-    this.setState({ startPointX:x, startPointY:y });
+    let { x, y } = this.onTouch(event);
+    this.setState({ startPointX: x, startPointY: y });
   }
 
   onResponderMove(event) {
-    let {x, y} = this.onTouch(event);
-    this.setState({ currentPointX:x, currentPointY:y });
+    let { x, y } = this.onTouch(event);
+    this.setState({ currentPointX: x, currentPointY: y });
   }
 
   onResponderRelease() {
-    // let strokes = this.state.previousStrokes;
-    // if (this.state.currentPoints.length < 1) return;
-    // let points = this.state.currentPoints;
-    // if (points.length === 1) {
-    //   let p = points[0];
-    //   let distance = parseInt(Math.sqrt(this.props.strokeWidth || 4) / 2);
-    //   points.push(new Point(p.x + distance, p.y + distance, p.time));
-    // }
-    // let newElement = {
-    //   type: "Path",
-    //   attributes: {
-    //     d: this.state.pen.pointsToSvg(points),
-    //     stroke: this.props.color || "#000000",
-    //     strokeWidth: this.props.strokeWidth || 4,
-    //     fill: "none",
-    //     strokeLinecap: "round",
-    //     strokeLinejoin: "round"
-    //   }
-    // };
-    // this.state.pen.addStroke(points);
-    // this.setState(
-    //   {
-    //     previousStrokes: [...this.state.previousStrokes, newElement],
-    //     currentPoints: []
-    //   },
-    //   () => {
-    //     this._onChangeStrokes(this.state.previousStrokes);
-    //   }
-    // );
+    let rects = this.state.previousRects;
+    let newElement = {
+      startPointX: this.state.startPointX,
+      stopPointX: this.state.currentPointX,
+      startPointY: this.state.startPointY,
+      stopPointY: this.state.currentPointY
+    };
+    this.setState({ previousRects: [...rects, newElement] });
   }
 
   render() {
-      console.log(this.state.startPointX,this.state.startPointY)
+    console.log(this.state);
     return (
       <View style={styles.drawContainer} {...this._panResponder.panHandlers}>
         <Svg style={styles.drawSurface}>
           <G>
+            {this.state.previousRects.map((rect, index) => {
+              return this._renderRectElement(rect, index);
+            })}
             <Rect
               {...this.state.pen.pointsToSvgRect(
                 this.state.startPointX,
