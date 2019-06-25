@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Text, TouchableOpacity, View, Alert } from "react-native";
+import { Modal, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 
 export default class ModalExample extends Component {
   render() {
@@ -14,15 +14,14 @@ export default class ModalExample extends Component {
       >
         <View
           style={{
-            margin: 50,
-            alignSelf: "center",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            backgroundColor: "blue"
+            backgroundColor: "white",
+            margin: 70,
+            alignItems: "stretch",
+            flexDirection: "column"
           }}
         >
           <TouchableOpacity
+            style={styles.button}
             onPress={() => {
               this.props.onSelect("round");
             }}
@@ -30,6 +29,7 @@ export default class ModalExample extends Component {
             <Text>round</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.button}
             onPress={() => {
               this.props.onSelect("oblong");
             }}
@@ -37,6 +37,7 @@ export default class ModalExample extends Component {
             <Text>oblong</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.button}
             onPress={() => {
               this.props.onSelect("capsule");
             }}
@@ -44,6 +45,7 @@ export default class ModalExample extends Component {
             <Text>capsule</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.button}
             onPress={() => {
               this.props.onSelect("other");
             }}
@@ -55,3 +57,13 @@ export default class ModalExample extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "white",
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    alignItems: "center"
+  }
+});
