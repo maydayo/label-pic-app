@@ -15,7 +15,6 @@ class ReviewPicScreen extends Component {
 
   uploading() {
     const { uri, type } = this.props.navigation.state.params;
-    console.log(uri);
     const file = new ReactNativeFile({
       uri,
       name: `mobile-pic-label-upload.jpg`,
@@ -29,7 +28,6 @@ class ReviewPicScreen extends Component {
     this.props.navigation.goBack();
   }
   render() {
-    console.log("P", this.props);
     return (
       <View style={styles.container}>
         <View style={styles.topView}>

@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { View, PanResponder, StyleSheet, Platform } from "react-native";
 import Svg, { G, Path, Rect } from "react-native-svg";
 import Pen from "./tools/pen";
-import Label from "./Label"
-
-const { OS } = Platform;
+import Label from "./Label";
+import PopupMenu from "./PopupMenu";
 
 export default class Whiteboard extends Component {
   constructor(props, context) {
@@ -15,16 +14,31 @@ export default class Whiteboard extends Component {
       currentPointX: null,
       currentPointY: null,
       previousRects: [],
-      pen: new Pen()
+      pen: new Pen(),
+      isPopup: false
     };
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (event, gs) => true,
-      onMoveShouldSetPanResponder: (event, gs) => true,
+      onStartShouldSetPanResponder: () => this.handleDrawPopup(),
+      onMoveShouldSetPanResponder: () => this.handleDrawPopup(),
       onPanResponderGrant: (event, gs) => this.onResponderGrant(event, gs),
       onPanResponderMove: (event, gs) => this.onResponderMove(event, gs),
       onPanResponderRelease: (event, gs) => this.onResponderRelease(event, gs)
     });
   }
+
+  handleDrawPopup = () => {
+    if (this.state.isPopup) return false;
+    return true;
+  };
+
+  handleCancel = () => {
+    this.rewind();
+    this.setState({ isPopup: false });
+  };
+
+  handleConfirm = value => {
+    this.setState({ isPopup: false });
+  };
 
   rewind = () => {
     if (this.state.previousRects.length < 1) return;
@@ -41,21 +55,7 @@ export default class Whiteboard extends Component {
   };
 
   _renderRectElement = (rect, index) => {
-    return (
-        <Label rect={rect} key={index} pen={this.state.pen} />
-    //   <Rect
-    //     {...this.state.pen.pointsToSvgRect(
-    //       rect.startPointX,
-    //       rect.startPointY,
-    //       rect.stopPointX,
-    //       rect.stopPointY
-    //     )}
-    //     key={index}
-    //     stroke={this.props.color || "#ff00ff"}
-    //     strokeWidth={this.props.strokeWidth || 2}
-    //     fill="none"
-    //   />
-    );
+    return <Label rect={rect} key={index} pen={this.state.pen} />;
   };
 
   onTouch(event) {
@@ -86,12 +86,17 @@ export default class Whiteboard extends Component {
       startPointY: this.state.startPointY,
       stopPointY: this.state.currentPointY
     };
-    this.setState({ previousRects: [...rects, newElement] });
+    this.setState({ previousRects: [...rects, newElement], isPopup: true });
   }
 
   render() {
     return (
       <View style={styles.drawContainer} {...this._panResponder.panHandlers}>
+        <PopupMenu
+          isVisible={this.state.isPopup}
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+        />
         <Svg style={styles.drawSurface}>
           <G>
             {this.state.previousRects.map((rect, index) => {

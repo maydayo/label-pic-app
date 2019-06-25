@@ -8,7 +8,6 @@ export default class TakePicScreen extends Component {
       .takePictureAsync({ width: 720 })
       .catch(err => console.error(err));
     const type = "image/jpeg";
-    console.log(uri)
     this.props.navigation.navigate("ReviewPic", {
       uri,
       type,
