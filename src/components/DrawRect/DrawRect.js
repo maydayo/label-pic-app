@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, PanResponder, StyleSheet, BackHandler } from "react-native";
-import Svg, { G, Path, Rect } from "react-native-svg";
+import Svg, { G, Rect } from "react-native-svg";
 import Pen from "./tools/pen";
 import LabelItem from "./LabelItem";
 import PopupMenu from "./PopupMenu";
