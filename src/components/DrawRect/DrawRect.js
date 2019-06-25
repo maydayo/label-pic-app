@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, PanResponder, StyleSheet, Platform } from "react-native";
+import { View, PanResponder, StyleSheet, TouchableOpacity, Text } from "react-native";
 import Svg, { G, Path, Rect } from "react-native-svg";
 import Pen from "./tools/pen";
 import LabelItem from "./LabelItem";
@@ -32,7 +32,7 @@ export default class Whiteboard extends Component {
   };
 
   handleCancelPopup = () => {
-    this.rewind();
+    this.clearCurrent()
     this.setState({ isPopup: false });
   };
 
@@ -45,16 +45,21 @@ export default class Whiteboard extends Component {
     if (this.state.previousRects.length < 1) return;
     let rects = this.state.previousRects;
     rects.pop();
-
     this.setState({
       previousRects: [...rects],
+    })
+    this.clearCurrent()
+  };
+
+  clearCurrent = () => {
+    this.setState({
       startPointX: null,
       startPointY: null,
       currentPointX: null,
-      currentPointY: null
+      currentPointY: null,
+      labelTag: ""
     });
-  };
-
+  }
   renderRectElement = (rect, index) => {
     return <LabelItem rect={rect} key={index} pen={this.state.pen} />;
   };
