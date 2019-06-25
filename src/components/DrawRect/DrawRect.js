@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, PanResponder, StyleSheet, Platform } from "react-native";
 import Svg, { G, Path, Rect } from "react-native-svg";
 import Pen from "./tools/pen";
-import Label from "./Label";
+import LabelItem from "./LabelItem";
 import PopupMenu from "./PopupMenu";
 
 export default class Whiteboard extends Component {
@@ -31,12 +31,13 @@ export default class Whiteboard extends Component {
     return true;
   };
 
-  handleCancel = () => {
+  handleCancelPopup = () => {
     this.rewind();
     this.setState({ isPopup: false });
   };
 
-  handleConfirm = value => {
+  handleSelectPopup = labelTag => {
+    this.addNewLabelItem(labelTag)
     this.setState({ isPopup: false });
   };
 
@@ -54,16 +55,27 @@ export default class Whiteboard extends Component {
     });
   };
 
-  _renderRectElement = (rect, index) => {
-    return <Label rect={rect} key={index} pen={this.state.pen} />;
+  renderRectElement = (rect, index) => {
+    return <LabelItem rect={rect} key={index} pen={this.state.pen} />;
   };
 
+  addNewLabelItem = (labelTag) =>{
+    let rects = this.state.previousRects;
+    let newElement = {
+      startPointX: this.state.startPointX,
+      stopPointX: this.state.currentPointX,
+      startPointY: this.state.startPointY,
+      stopPointY: this.state.currentPointY,
+      labelTag
+    };
+    this.setState({ previousRects: [...rects, newElement] });
+  }
+
   onTouch(event) {
-    let x, y, timpstamp;
-    [x, y, timestamp] = [
+    let x, y;
+    [x, y] = [
       event.nativeEvent.locationX,
       event.nativeEvent.locationY,
-      event.nativeEvent.timestamp
     ];
     return { x, y };
   }
@@ -79,28 +91,22 @@ export default class Whiteboard extends Component {
   }
 
   onResponderRelease() {
-    let rects = this.state.previousRects;
-    let newElement = {
-      startPointX: this.state.startPointX,
-      stopPointX: this.state.currentPointX,
-      startPointY: this.state.startPointY,
-      stopPointY: this.state.currentPointY
-    };
-    this.setState({ previousRects: [...rects, newElement], isPopup: true });
+    this.setState({isPopup: true})
   }
 
   render() {
     return (
       <View style={styles.drawContainer} {...this._panResponder.panHandlers}>
         <PopupMenu
+          style={styles.drawSurface}
           isVisible={this.state.isPopup}
-          onCancel={this.handleCancel}
-          onConfirm={this.handleConfirm}
+          onCancel={this.handleCancelPopup}
+          onSelect={this.handleSelectPopup}
         />
         <Svg style={styles.drawSurface}>
           <G>
             {this.state.previousRects.map((rect, index) => {
-              return this._renderRectElement(rect, index);
+              return this.renderRectElement(rect, index);
             })}
             <Rect
               {...this.state.pen.pointsToSvgRect(

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Text, TouchableHighlight, View, Alert } from "react-native";
+import { Modal, Text, TouchableOpacity, View, Alert } from "react-native";
 
 export default class ModalExample extends Component {
   render() {
@@ -16,29 +16,41 @@ export default class ModalExample extends Component {
         <View
           style={{
             margin: 50,
-            alignItems: "stretch",
-            justifyContent:"center",
+            alignSelf: "center",
+            alignItems: "center",
+            justifyContent: "center",
             flexDirection: "column",
             backgroundColor: "blue"
           }}
         >
-          <Text>Hello World!</Text>
-
-          <Text>Hello World!</Text>
-          <Text>Hello World!</Text>
-          <Text>Hello World!</Text>
-          <Text>Hello World!</Text>
-          <Text>Hello World!</Text>
-          <Text>Hello World!</Text>
-          <Text>Hello World!</Text>
-          <Text>Hello World!</Text>
-          <TouchableHighlight
+          <TouchableOpacity
             onPress={() => {
-              this.props.onConfirm();
+              this.props.onSelect("round");
             }}
           >
-            <Text>Hide Modal</Text>
-          </TouchableHighlight>
+            <Text>round</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.onSelect("oblong");
+            }}
+          >
+            <Text>oblong</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.onSelect("capsule");
+            }}
+          >
+            <Text>capsule</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.onSelect("other");
+            }}
+          >
+            <Text>other</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Rect } from "react-native-svg";
 
@@ -16,8 +16,14 @@ export default props => {
         strokeWidth={this.props.strokeWidth || 2}
         fill="none"
       />
-      <Text style={{ color: "#ff00ff", top: props.rect.startPointY, left: props.rect.startPointX }}>
-        label
+      <Text
+        style={{
+          color: "#ff00ff",
+          top: props.rect.startPointY,
+          left: props.rect.startPointX
+        }}
+      >
+        {props.rect.labelTag||""}
       </Text>
     </View>
   );
