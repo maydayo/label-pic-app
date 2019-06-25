@@ -47,7 +47,7 @@ class ReviewPicScreen extends Component {
             style={styles.buttonViewContainer}
             onPress={() => this.uploading()}
           >
-            <Text style={styles.textButton}>ส่งภาพ</Text>
+            <Text style={styles.textButton}>Send</Text>
           </TouchableOpacity>
         </View>
       </View>

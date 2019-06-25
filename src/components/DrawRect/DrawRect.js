@@ -55,6 +55,7 @@ export default class Whiteboard extends Component {
   };
 
   handleSelectPopup = labelTag => {
+    this.clearCurrent();
     this.addNewLabelItem(labelTag);
     this.setState({ isPopup: false });
   };
@@ -134,7 +135,7 @@ export default class Whiteboard extends Component {
                 this.state.currentPointX,
                 this.state.currentPointY
               )}
-              stroke={this.props.color || "#ff00ff"}
+              stroke={this.props.color || "#ffb10a"}
               strokeWidth={this.props.strokeWidth || 2}
               fill="none"
             />
