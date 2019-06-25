@@ -3,7 +3,6 @@ import { Modal, Text, TouchableOpacity, View, Alert } from "react-native";
 
 export default class ModalExample extends Component {
   render() {
-    console.log(this.props);
     return (
       <Modal
         transparent={true}

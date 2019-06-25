@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, PanResponder, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, PanResponder, StyleSheet, BackHandler } from "react-native";
 import Svg, { G, Path, Rect } from "react-native-svg";
 import Pen from "./tools/pen";
 import LabelItem from "./LabelItem";
@@ -26,29 +26,46 @@ export default class Whiteboard extends Component {
     });
   }
 
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.handleBackPress
+    );
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
+  handleBackPress = () => {
+    if (this.state.previousRects.length != 0) {
+      this.rewind();
+      return true;
+    } else return false;
+  };
+
   handleDrawPopup = () => {
     if (this.state.isPopup) return false;
     return true;
   };
 
   handleCancelPopup = () => {
-    this.clearCurrent()
+    this.clearCurrent();
     this.setState({ isPopup: false });
   };
 
   handleSelectPopup = labelTag => {
-    this.addNewLabelItem(labelTag)
+    this.addNewLabelItem(labelTag);
     this.setState({ isPopup: false });
   };
 
   rewind = () => {
-    if (this.state.previousRects.length < 1) return;
     let rects = this.state.previousRects;
     rects.pop();
     this.setState({
-      previousRects: [...rects],
-    })
-    this.clearCurrent()
+      previousRects: [...rects]
+    });
+    this.clearCurrent();
   };
 
   clearCurrent = () => {
@@ -59,12 +76,12 @@ export default class Whiteboard extends Component {
       currentPointY: null,
       labelTag: ""
     });
-  }
+  };
   renderRectElement = (rect, index) => {
     return <LabelItem rect={rect} key={index} pen={this.state.pen} />;
   };
 
-  addNewLabelItem = (labelTag) =>{
+  addNewLabelItem = labelTag => {
     let rects = this.state.previousRects;
     let newElement = {
       startPointX: this.state.startPointX,
@@ -74,14 +91,11 @@ export default class Whiteboard extends Component {
       labelTag
     };
     this.setState({ previousRects: [...rects, newElement] });
-  }
+  };
 
   onTouch(event) {
     let x, y;
-    [x, y] = [
-      event.nativeEvent.locationX,
-      event.nativeEvent.locationY,
-    ];
+    [x, y] = [event.nativeEvent.locationX, event.nativeEvent.locationY];
     return { x, y };
   }
 
@@ -96,7 +110,7 @@ export default class Whiteboard extends Component {
   }
 
   onResponderRelease() {
-    this.setState({isPopup: true})
+    this.setState({ isPopup: true });
   }
 
   render() {

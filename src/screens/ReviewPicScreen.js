@@ -12,6 +12,7 @@ class ReviewPicScreen extends Component {
       processing: false
     };
   }
+  
 
   uploading() {
     const { uri, type } = this.props.navigation.state.params;
