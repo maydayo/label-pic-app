@@ -9,6 +9,8 @@ export default class Whiteboard extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      viewWidth: null,
+      viewHeight: null,
       startPointX: null,
       startPointY: null,
       currentPointX: null,
@@ -40,7 +42,7 @@ export default class Whiteboard extends Component {
   handleBackPress = () => {
     if (this.state.previousRects.length != 0) {
       this.rewind();
-      this.props.onUpdateLabelInfo(this.state.previousRects)
+      this.props.onUpdateLabelInfo(this.state.previousRects);
       return true;
     } else return false;
   };
@@ -86,13 +88,17 @@ export default class Whiteboard extends Component {
   addNewLabelItem = labelTag => {
     let rects = this.state.previousRects;
     let newElement = {
+      viewWidth: this.state.viewWidth,
+      viewHeight: this.state.viewHeight,
       startPointX: this.state.startPointX,
       stopPointX: this.state.currentPointX,
       startPointY: this.state.startPointY,
       stopPointY: this.state.currentPointY,
       labelTag
     };
-    this.setState({ previousRects: [...rects, newElement] }, () => this.props.onUpdateLabelInfo(this.state.previousRects));
+    this.setState({ previousRects: [...rects, newElement] }, () =>
+      this.props.onUpdateLabelInfo(this.state.previousRects)
+    );
   };
 
   onTouch(event) {
@@ -117,7 +123,14 @@ export default class Whiteboard extends Component {
 
   render() {
     return (
-      <View style={styles.drawContainer} {...this._panResponder.panHandlers}>
+      <View
+        style={styles.drawContainer}
+        onLayout={event => {
+          let { width, height } = event.nativeEvent.layout;
+          this.setState({ viewWidth: width, viewHeight: height });
+        }}
+        {...this._panResponder.panHandlers}
+      >
         <PopupMenu
           style={styles.drawSurface}
           isVisible={this.state.isPopup}
