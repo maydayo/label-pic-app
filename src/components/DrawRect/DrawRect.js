@@ -40,6 +40,7 @@ export default class Whiteboard extends Component {
   handleBackPress = () => {
     if (this.state.previousRects.length != 0) {
       this.rewind();
+      this.props.onUpdateLabelInfo(this.state.previousRects)
       return true;
     } else return false;
   };
@@ -91,7 +92,7 @@ export default class Whiteboard extends Component {
       stopPointY: this.state.currentPointY,
       labelTag
     };
-    this.setState({ previousRects: [...rects, newElement] });
+    this.setState({ previousRects: [...rects, newElement] }, () => this.props.onUpdateLabelInfo(this.state.previousRects));
   };
 
   onTouch(event) {

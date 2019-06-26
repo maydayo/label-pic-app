@@ -9,10 +9,14 @@ class ReviewPicScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      processing: false
+      processing: false,
+      label: []
     };
   }
   
+  onUpdateLabelInfo = (labelInfo) => {
+    this.setState({label: labelInfo})
+  }
 
   uploading() {
     const { uri, type } = this.props.navigation.state.params;
@@ -23,12 +27,14 @@ class ReviewPicScreen extends Component {
     });
     this.props.mutate({
       variables: {
-        file
+        file,
+        label: this.state.label
       }
     });
     this.props.navigation.goBack();
   }
   render() {
+    console.log("label",this.state.label)
     return (
       <View style={styles.container}>
         <View style={styles.topView}>
@@ -39,7 +45,7 @@ class ReviewPicScreen extends Component {
             />
           </View>
           <View style={styles.imageViewContainer}>
-            <Label />
+            <Label onUpdateLabelInfo={this.onUpdateLabelInfo}/>
           </View>
         </View>
         <View style={styles.bottomView}>
@@ -56,8 +62,8 @@ class ReviewPicScreen extends Component {
 }
 
 const uploadMutation = gql`
-  mutation uploadFile($file: Upload!) {
-    uploadFile(file: $file) {
+  mutation uploadFile($file: Upload!,$label: [LabelInput]) {
+    uploadFile(file: $file, label: $label) {
       id
     }
   }

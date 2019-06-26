@@ -11,7 +11,7 @@ export default class App extends Component {
   constructor(...args) {
     super(args);
     const httpLink = new createUploadLink({
-      uri: API_URL_PROD,
+      uri: API_URL_DEV,
     });
 
     const errorLink = onError(({ graphQLErrors, networkError }) => {
